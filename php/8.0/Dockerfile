@@ -29,6 +29,8 @@ RUN apt-get update \
         php8.0-readline \
         php8.0-xml \
         php8.0-zip \
+        php8.0-bcmath \
+        php8.0-intl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* ~/.composer
 

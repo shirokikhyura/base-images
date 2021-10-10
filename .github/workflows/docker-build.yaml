@@ -14,21 +14,19 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: php74
+          - name: php-7.4
             folder: php/7.4
             arch: [linux/amd64, linux/arm64/v8]
             targets:
               primary: cli
               secondary: fpm
-              tertiary: swoole
 
-#          - name: php80
-#            folder: php/8.0
-#            arch: [linux/amd64, linux/arm64]
-#            targets:
-#              primary: cli
-#              secondary: fpm
-#              tertiary: swoole
+          - name: php-8.0
+            folder: php/8.0
+            arch: [linux/arm64/v8, linux/amd64]
+            targets:
+              primary: cli
+              secondary: fpm
 
     steps:
       - name: Checkout
@@ -53,33 +51,20 @@ jobs:
           platforms: ${{ join(matrix.arch, ',') }}
           push: true
           pull: true
-          tags: shirokikh/${{ format('{0}-{1}', matrix.name, matrix.targets.primary) }}:latest
+          tags: shirokikh/${{ matrix.name }}:${{ matrix.targets.primary }}
           target: ${{ matrix.targets.primary }}
-          cache-from: type=registry,ref=shirokikh/${{ format('{0}-{1}', matrix.name, matrix.targets.primary) }}:buildcache
-          cache-to: type=registry,ref=shirokikh/${{ format('{0}-{1}', matrix.name, matrix.targets.primary) }}:buildcache,mode=max
+          cache-from: type=registry,ref=shirokikh/${{ matrix.name }}:buildcache
+          cache-to: type=registry,ref=shirokikh/${{ matrix.name }}:buildcache,mode=max
 
-#      - name: Build and push secondary container
-#        if: matrix.targets.secondary
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: ${{ matrix.folder }}
-#          platforms: ${{ join(matrix.arch, ',') }}
-#          push: true
-#          pull: true
-#          tags: shirokikh/${{ format('{0}-{1}', matrix.name, matrix.targets.secondary) }}:latest
-#          target: ${{ matrix.targets.secondary }}
-#          cache-from: type=registry,ref=shirokikh/${{ format('{0}-{1}', matrix.name, matrix.targets.secondary) }}:buildcache
-#          cache-to: type=registry,ref=shirokikh/${{ format('{0}-{1}', matrix.name, matrix.targets.secondary) }}:buildcache,mode=max
-
-#      - name: Build and push tertiary container
-#        if: matrix.targets.tertiary
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: ${{ matrix.folder }}
-#          platforms: ${{ join(matrix.arch, ',') }}
-#          push: true
-#          pull: true
-#          tags: shirokikh/${{ format('{0}-{1}', matrix.name, matrix.targets.tertiary) }}:latest
-#          target: ${{ matrix.targets.tertiary }}
-#          cache-from: type=registry,ref=shirokikh/${{ format('{0}-{1}', matrix.name, matrix.targets.tertiary) }}:buildcache
-#          cache-to: type=registry,ref=shirokikh/${{ format('{0}-{1}', matrix.name, matrix.targets.tertiary) }}:buildcache,mode=max
+      - name: Build and push secondary container
+        if: matrix.targets.secondary
+        uses: docker/build-push-action@v2
+        with:
+          context: ${{ matrix.folder }}
+          platforms: ${{ join(matrix.arch, ',') }}
+          push: true
+          pull: true
+          tags: shirokikh/${{ matrix.name }}:${{ matrix.targets.secondary }}
+          target: ${{ matrix.targets.secondary }}
+          cache-from: type=registry,ref=shirokikh/${{ matrix.name }}:buildcache
+          cache-to: type=registry,ref=shirokikh/${{ matrix.name }}:buildcache,mode=max

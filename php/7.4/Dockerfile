@@ -31,6 +31,8 @@ RUN apt-get update \
         php7.4-readline \
         php7.4-xml \
         php7.4-zip \
+        php7.4-bcmath \
+        php7.4-intl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
