@@ -16,7 +16,7 @@ jobs:
         include:
           - name: php74
             folder: php/7.4
-            arch: [linux/amd64, linux/arm64, linux/arm64/v8]
+            arch: [linux/amd64, linux/arm64/v8]
             targets:
               primary: cli
               secondary: fpm
@@ -55,8 +55,8 @@ jobs:
           pull: true
           tags: shirokikh/${{ format('{0}-{1}', matrix.name, matrix.targets.primary) }}:latest
           target: ${{ matrix.targets.primary }}
-#          cache-from: type=registry,ref=shirokikh/${{ matrix.targets.primary && format('{0}-{1}', matrix.name, matrix.targets.primary) || matrix.name }}:buildcache
-#          cache-to: type=registry,ref=shirokikh/${{ matrix.targets.primary && format('{0}-{1}', matrix.name, matrix.targets.primary) || matrix.name }}:buildcache,mode=max
+          cache-from: type=registry,ref=shirokikh/${{ format('{0}-{1}', matrix.name, matrix.targets.primary) }}:buildcache
+          cache-to: type=registry,ref=shirokikh/${{ format('{0}-{1}', matrix.name, matrix.targets.primary) }}:buildcache,mode=max
 
 #      - name: Build and push secondary container
 #        if: matrix.targets.secondary
