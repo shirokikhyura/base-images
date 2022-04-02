@@ -36,6 +36,8 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
+RUN ln -s /usr/bin/php7.4 /usr/bin/php
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 CMD ["php", "-a"]
